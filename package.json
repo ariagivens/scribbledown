@@ -1,0 +1,22 @@
+{
+    "name": "scribbledown",
+    "author": "Aria Givens <aria@ariagivens.com>",
+    "license": "GPL-3.0-only",
+    "type": "module",
+    "devDependencies": {
+        "@eslint/css": "^1.0.0",
+        "@eslint/js": "^10.0.1",
+        "@eslint/json": "^1.2.0",
+        "eslint": "^10.1.0",
+        "globals": "^17.4.0",
+        "husky": "^9.1.7",
+        "jiti": "^2.6.1",
+        "prettier": "^3.8.1",
+        "rolldown": "^1.0.0-rc.12",
+        "typescript-eslint": "^8.57.2",
+        "web-ext": "^10.0.0"
+    },
+    "scripts": {
+        "prepare": "husky"
+    }
+}
