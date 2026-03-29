@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<package
+    xmlns="http://www.idpf.org/2007/opf"
+    unique-identifier="uid"
+    version="3.0"
+>
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+        <dc:identifier id="uid">{{uid}}</dc:identifier>
+        <dc:title>{{title}}</dc:title>
+        <dc:language>en</dc:language>
+    </metadata>
+    <manifest>
+        <item
+            href="nav.xhtml"
+            id="toc"
+            media-type="application/xhtml+xml"
+            properties="nav"
+        />
+        <item
+            href="content.xhtml"
+            id="main"
+            media-type="application/xhtml+xml"
+        />
+    </manifest>
+    <spine>
+        <itemref idref="main" />
+    </spine>
+</package>

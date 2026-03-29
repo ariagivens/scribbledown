@@ -1,0 +1,20 @@
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:epub="http://www.idpf.org/2007/ops"
+>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{{title}}</title>
+    </head>
+    <body>
+        <nav epub:type="toc" id="toc">
+            <ol>
+                {{#each chapters}}
+                    <li>
+                        <a href="content.xhtml#c.{{order}}">{{title}}</a>
+                    </li>
+                {{/each}}
+            </ol>
+        </nav>
+    </body>
+</html>

@@ -1,0 +1,10 @@
+.sd_read_buttons {
+    position: absolute;
+    width: 100%;
+    bottom: -10px;
+}
+
+.sd_tip_icon {
+    cursor: pointer;
+    margin-right: 5px;
+}

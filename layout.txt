@@ -1,0 +1,9 @@
+mimetype
+META-INF/
+	container.xml
+OEBPS/
+	package.opf
+	content.xhtml
+	images/
+		cover.png
+

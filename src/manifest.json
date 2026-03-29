@@ -4,8 +4,9 @@
     "version": "0.0.1",
     "content_scripts": [
         {
-            "matches": ["*://*.scribblehub.com/*"],
-            "js": ["content_script.js"]
+            "matches": ["*://www.scribblehub.com/series/*"],
+            "js": ["content_script.js"],
+            "css": ["content_script.css"]
         }
     ],
     "browser_specific_settings": {

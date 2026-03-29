@@ -25,5 +25,5 @@ export default defineConfig([
         language: "css/css",
         extends: ["css/recommended"],
     },
-    globalIgnores(["node_modules", "package-lock.json"]),
+    globalIgnores(["node_modules", "package-lock.json", "dist"]),
 ]);
