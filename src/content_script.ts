@@ -1,39 +1,25 @@
 import { get_chapter_refs } from "./chapter_ref";
-import { get_chapters, Chapter } from "./chapter";
-import container_xml from "./container.xml.txt";
-import { RawTemplate as package_opf_template } from "./package.opf.hbs";
-import { RawTemplate as nav_xhtml_template } from "./nav.xhtml.hbs";
-import { RawTemplate as content_xhtml_template } from "./content.xhtml.hbs";
+import { get_chapters } from "./chapter";
+import { create_epub } from "./epub";
 
-import JSZip from "jszip";
-import { saveAs } from "file-saver";
 import { v4 as uuidv4 } from "uuid";
+import sanitize from "sanitize-filename";
+import { saveAs } from "file-saver";
 
-async function to_epub(chapters: Chapter[]) {
-    const zip = new JSZip();
-    zip.file("mimetype", "application/epub+zip", { compression: "STORE" });
-    zip.file("META-INF/container.xml", container_xml);
-    const title = "Work title";
-    const uid = uuidv4();
-    const package_opf = package_opf_template({ title, uid });
-    const nav_xhtml = nav_xhtml_template({ title, chapters });
-    const content_xhtml = content_xhtml_template({ title, chapters });
-    const oebps = zip.folder("OEBPS");
-    if (!oebps) {
-        throw new Error("Failed to create directory");
-    }
-    oebps.file("package.opf", package_opf);
-    oebps.file("nav.xhtml", nav_xhtml);
-    oebps.file("content.xhtml", content_xhtml);
-
-    return await zip.generateAsync({ type: "blob" });
+function get_title(): string {
+    return (
+        document.querySelector<HTMLMetaElement>("meta[property='og:title']")
+            ?.content ?? "Untitled"
+    );
 }
 
 async function download() {
     const chapter_refs = await get_chapter_refs();
     const chapters = await get_chapters(chapter_refs);
-    const epub = await to_epub(chapters);
-    saveAs(epub, "test.epub");
+    const title = get_title();
+    const uid = uuidv4();
+    const epub = await create_epub(chapters, title, uid);
+    saveAs(epub, sanitize(title) + ".epub");
 }
 
 const read_buttons = document.querySelector(".read_buttons");
