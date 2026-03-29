@@ -60,7 +60,9 @@ export async function get_chapters(
     const raws = await fetch_chapter_raws(chapter_refs);
     const chapters = raws.map(({ title, order, html }) => {
         const chapter = cheerio.load(html);
-        const paragraphs = chapter("#chp_raw > p")
+        const paragraphs = chapter(
+            ":is(#chp_raw, #chp_raw > div, #chp_raw > div > div) > :is(p, b, i, u)",
+        )
             .map((i, p) => chapter(p).text().trim())
             .filter((i, p) => p !== "")
             .toArray();
