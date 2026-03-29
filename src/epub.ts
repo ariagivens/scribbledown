@@ -1,4 +1,4 @@
-import { Chapter } from "./chapter";
+import type { Chapter } from "./chapter";
 import container_xml from "./container.xml.txt";
 import { RawTemplate as package_opf_template } from "./package.opf.hbs";
 import { RawTemplate as nav_xhtml_template } from "./nav.xhtml.hbs";

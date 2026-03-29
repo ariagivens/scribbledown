@@ -9,6 +9,7 @@ format:
 lint:
     npx eslint
     npx prettier -c .
+    npx tsc --noEmit
     just build
     npx web-ext lint -s dist --self-hosted
 

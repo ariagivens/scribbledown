@@ -6,6 +6,10 @@
         {
             "files": "**/*.opf.hbs",
             "options": { "parser": "xml" }
+        },
+        {
+            "files": "tsconfig.json",
+            "options": { "parser": "jsonc" }
         }
     ]
 }

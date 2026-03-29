@@ -4,6 +4,8 @@ import tseslint from "typescript-eslint";
 import json from "@eslint/json";
 import css from "@eslint/css";
 import { defineConfig, globalIgnores } from "eslint/config";
+import { includeIgnoreFile } from "@eslint/compat";
+import { fileURLToPath } from "node:url";
 
 export default defineConfig([
     {
@@ -15,8 +17,18 @@ export default defineConfig([
     tseslint.configs.recommended,
     {
         files: ["**/*.json"],
+        ignores: ["tsconfig.json"],
         plugins: { json },
         language: "json/json",
+        extends: ["json/recommended"],
+    },
+    {
+        files: ["**/*.jsonc", "tsconfig.json"],
+        plugins: { json },
+        language: "json/jsonc",
+        languageOptions: {
+            allowTrailingCommas: true,
+        },
         extends: ["json/recommended"],
     },
     {
@@ -25,5 +37,6 @@ export default defineConfig([
         language: "css/css",
         extends: ["css/recommended"],
     },
-    globalIgnores(["node_modules", "package-lock.json", "dist"]),
+    globalIgnores(["package-lock.json"]),
+    includeIgnoreFile(fileURLToPath(new URL(".gitignore", import.meta.url))),
 ]);

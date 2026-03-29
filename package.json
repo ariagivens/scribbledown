@@ -4,6 +4,7 @@
     "license": "GPL-3.0-only",
     "type": "module",
     "devDependencies": {
+        "@eslint/compat": "^2.0.3",
         "@eslint/css": "^1.0.0",
         "@eslint/js": "^10.0.1",
         "@eslint/json": "^1.2.0",
@@ -17,6 +18,7 @@
         "prettier": "^3.8.1",
         "rolldown": "^1.0.0-rc.12",
         "rollup-plugin-handlebars-precompiler": "^1.0.2",
+        "typescript": "^5.9.3",
         "typescript-eslint": "^8.57.2",
         "web-ext": "^10.0.0"
     },

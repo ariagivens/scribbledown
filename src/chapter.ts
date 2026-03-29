@@ -1,4 +1,4 @@
-import { ChapterRef } from "./chapter_ref";
+import type { ChapterRef } from "./chapter_ref";
 import { lazy } from "@nfnitloop/better-iterators";
 import * as cheerio from "cheerio";
 
