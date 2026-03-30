@@ -15,6 +15,7 @@
         "husky": "^9.1.7",
         "jiti": "^2.6.1",
         "jsr": "^0.14.3",
+        "patch-package": "^8.0.1",
         "prettier": "^3.8.1",
         "rolldown": "^1.0.0-rc.12",
         "rollup-plugin-handlebars-precompiler": "^1.0.2",
@@ -23,7 +24,8 @@
         "web-ext": "^10.0.0"
     },
     "scripts": {
-        "prepare": "husky"
+        "prepare": "husky",
+        "postinstall": "patch-package"
     },
     "dependencies": {
         "@nfnitloop/better-iterators": "npm:@jsr/nfnitloop__better-iterators@^2.0.0-rc4",

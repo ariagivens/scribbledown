@@ -1,0 +1,12 @@
+diff --git a/node_modules/rollup-plugin-handlebars-precompiler/lib/index.js b/node_modules/rollup-plugin-handlebars-precompiler/lib/index.js
+index d1ae660..d247fc9 100644
+--- a/node_modules/rollup-plugin-handlebars-precompiler/lib/index.js
++++ b/node_modules/rollup-plugin-handlebars-precompiler/lib/index.js
+@@ -188,7 +188,6 @@ export default class PluginImpl {
+     ]
+     const afterTmpl = [
+       ')',
+-      'export default Render(RawTemplate)',
+       ...(this.#isPartial(id) ? [ this.#partialRegistration(id) ] : [])
+     ]
+     return {
