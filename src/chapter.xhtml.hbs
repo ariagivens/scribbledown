@@ -9,14 +9,9 @@
         <title>{{title}}</title>
     </head>
     <body>
-        <nav epub:type="toc" id="toc">
-            <ol>
-                {{#each chapters}}
-                <li>
-                    <a href="{{identifier}}.xhtml#start">{{title}}</a>
-                </li>
-                {{/each}}
-            </ol>
-        </nav>
+        <h2 id="start">{{title}}</h2>
+        {{#each paragraphs}}
+        <p>{{this}}</p>
+        {{/each}}
     </body>
 </html>

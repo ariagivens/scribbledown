@@ -16,13 +16,17 @@
             media-type="application/xhtml+xml"
             properties="nav"
         />
+        {{#each chapters}}
         <item
-            href="content.xhtml"
-            id="main"
+            href="{{identifier}}.xhtml"
+            id="{{identifier}}"
             media-type="application/xhtml+xml"
         />
+        {{/each}}
     </manifest>
     <spine>
-        <itemref idref="main" />
+        {{#each chapters}}
+        <itemref idref="{{identifier}}" />
+        {{/each}}
     </spine>
 </package>

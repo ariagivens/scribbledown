@@ -9,6 +9,10 @@
             "options": { "parser": "xml" }
         },
         {
+            "files": "**/*.xhtml.hbs",
+            "options": { "parser": "xml" }
+        },
+        {
             "files": "tsconfig.json",
             "options": { "parser": "jsonc" }
         }
