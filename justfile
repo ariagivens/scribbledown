@@ -1,7 +1,5 @@
 build:
     npx rolldown -c
-    cp src/manifest.json dist
-    cp src/content_script.css dist
 
 format:
     npx prettier -w .

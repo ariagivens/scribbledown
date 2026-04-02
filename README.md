@@ -4,7 +4,8 @@ Convert scribblehub stories into beautiful, opinionated epubs.
 
 ## License
 
-This project is licensed under GPLv3 only. See LICENSE.md for details.
+This project is licensed under [GPLv3 only](LICENSE.md). Atkinson Hyperlegible
+is licensed under the [SIL Open Font License](src/fonts/OFL.txt).
 
 ## AI Statement
 

@@ -23,6 +23,11 @@
             media-type="application/xhtml+xml"
         />
         {{/each}}
+        <item href="fonts.css" id="font-embed" media-type="text/css" />
+        {{#each fonts}}
+        <item href="{{src}}" id="{{identifier}}" media-type="font/ttf" />
+        {{/each}}
+        <item href="style.css" id="style" media-type="text/css" />
     </manifest>
     <spine>
         {{#each chapters}}

@@ -1,0 +1,12 @@
+{{#each fonts}}
+@font-face {
+    font-family: "{{family}}";
+    {{#if style}}
+    font-style: {{style}};
+    {{/if}}
+    {{#if weight}}
+    font-weight: {{weight}};
+    {{/if}}
+    src: url({{src}})
+}
+{{/each}}
