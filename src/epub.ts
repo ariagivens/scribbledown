@@ -1,13 +1,14 @@
 import type { Chapter } from "./chapter";
+import type { Cover, Author } from "./content_script";
 import container_xml from "./container.xml.txt";
 import { RawTemplate as package_opf_template } from "./package.opf.hbs";
 import { RawTemplate as nav_xhtml_template } from "./nav.xhtml.hbs";
 import { RawTemplate as chapter_xhtml_template } from "./chapter.xhtml.hbs";
 import { RawTemplate as fonts_css_template } from "./fonts.css.hbs";
+import { RawTemplate as cover_html_template } from "./cover.xhtml.hbs";
 import ofl_txt from "./fonts/OFL.txt";
 import { RawTemplate as style_css_template } from "./style.css.hbs";
-
-import JSZip from "jszip";
+import { Zip } from "./zip";
 
 type Font = {
     identifier: string;
@@ -49,45 +50,62 @@ const fonts: Font[] = [
 ];
 
 function add_metadata(
-    zip: JSZip,
+    zip: Zip,
     chapters: Chapter[],
     title: string,
     uid: string,
+    author: Author,
+    cover: Cover,
 ) {
-    zip.file("mimetype", "application/epub+zip", { compression: "STORE" });
-    zip.file("META-INF/container.xml", container_xml);
-    zip.file(
+    zip.add("META-INF/container.xml", container_xml);
+    zip.add(
         "OEBPS/package.opf",
-        package_opf_template({ chapters, title, uid, fonts }),
+        package_opf_template({
+            chapters,
+            title,
+            uid,
+            fonts,
+            author,
+            cover,
+        }),
     );
-    zip.file("OEBPS/nav.xhtml", nav_xhtml_template({ chapters, title }));
+    zip.add("OEBPS/nav.xhtml", nav_xhtml_template({ chapters, title }));
 }
 
-function add_content(zip: JSZip, chapters: Chapter[]) {
+function add_front_matter(
+    zip: Zip,
+    cover: Cover,
+    title: string,
+    _author: Author,
+) {
+    zip.add(`OEBPS/cover.${cover.extension}`, cover.image);
+    zip.add("OEBPS/cover.xhtml", cover_html_template({ cover, title }));
+}
+
+function add_content(zip: Zip, chapters: Chapter[]) {
     for (const chapter of chapters) {
-        zip.file(
+        zip.add(
             "OEBPS/" + chapter.identifier + ".xhtml",
             chapter_xhtml_template(chapter),
         );
     }
 }
 
-async function add_fonts(zip: JSZip) {
-    zip.file("OEBPS/fonts.css", fonts_css_template({ fonts }));
+async function add_fonts(zip: Zip) {
+    zip.add("OEBPS/fonts.css", fonts_css_template({ fonts }));
     for (const { src } of fonts) {
         const response = await fetch(browser.runtime.getURL(src));
         if (!response.ok) {
             throw new Error("Failed to load font");
         }
-        const font = await response.arrayBuffer();
-        console.log(font);
-        zip.file("OEBPS/" + src, font);
+        const font = await response.blob();
+        zip.add("OEBPS/" + src, font);
     }
-    zip.file("OEBPS/fonts/ofl.txt", ofl_txt);
+    zip.add("OEBPS/fonts/ofl.txt", ofl_txt);
 }
 
-function add_style(zip: JSZip) {
-    zip.file(
+function add_style(zip: Zip) {
+    zip.add(
         "OEBPS/style.css",
         style_css_template({ font_family: "Atkinson Hyperlegible" }),
     );
@@ -97,11 +115,14 @@ export async function create_epub(
     chapters: Chapter[],
     title: string,
     uid: string,
-) {
-    const zip = new JSZip();
-    add_metadata(zip, chapters, title, uid);
+    author: Author,
+    cover: Cover,
+): Promise<Blob> {
+    const zip = new Zip("application/epub+zip");
+    add_metadata(zip, chapters, title, uid, author, cover);
+    add_front_matter(zip, cover, title, author);
     add_content(zip, chapters);
     await add_fonts(zip);
     add_style(zip);
-    return await zip.generateAsync({ type: "blob" });
+    return await zip.generate();
 }

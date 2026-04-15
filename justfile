@@ -13,4 +13,4 @@ lint:
 
 run:
     just build
-    cd dist && npx web-ext run --start-url www.scribblehub.com
+    cd dist && npx web-ext run --start-url www.scribblehub.com --devtools

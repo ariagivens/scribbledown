@@ -16,6 +16,24 @@ export default defineConfig([
     },
     tseslint.configs.recommended,
     {
+        rules: {
+            "no-unused-vars": [
+                "error",
+                {
+                    varsIgnorePattern: "^_",
+                    argsIgnorePattern: "^_",
+                },
+            ],
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    varsIgnorePattern: "^_",
+                    argsIgnorePattern: "^_",
+                },
+            ],
+        },
+    },
+    {
         files: ["**/*.json"],
         ignores: ["tsconfig.json"],
         plugins: { json },

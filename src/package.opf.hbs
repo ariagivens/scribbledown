@@ -7,14 +7,28 @@
     <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
         <dc:identifier id="uid">{{uid}}</dc:identifier>
         <dc:title>{{title}}</dc:title>
+        <dc:creator>{{author.name}}</dc:creator>
         <dc:language>en</dc:language>
+        <meta name="cover" content="cover-image" />
     </metadata>
     <manifest>
+        <item
+            href="cover.{{cover.extension}}"
+            id="cover-image"
+            media-type="{{cover.content_type}}"
+            properties="cover-image"
+        />
         <item
             href="nav.xhtml"
             id="toc"
             media-type="application/xhtml+xml"
             properties="nav"
+        />
+        <item
+            href="cover.xhtml"
+            id="cover-page"
+            media-type="application/xhtml+xml"
+            properties="calibre:title-page"
         />
         {{#each chapters}}
         <item
@@ -30,6 +44,7 @@
         <item href="style.css" id="style" media-type="text/css" />
     </manifest>
     <spine>
+        <itemref idref="cover-page" />
         {{#each chapters}}
         <itemref idref="{{identifier}}" />
         {{/each}}

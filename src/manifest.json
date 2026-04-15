@@ -1,7 +1,10 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "scribbledown",
     "version": "0.0.1",
+    "background": {
+        "scripts": ["background_script.js"]
+    },
     "content_scripts": [
         {
             "matches": ["*://www.scribblehub.com/series/*"],
@@ -17,5 +20,20 @@
                 "required": ["none"]
             }
         }
-    }
+    },
+    "host_permissions": [
+        "*://cdn.scribblehub.com/images/*",
+        "*://www.scribblehub.com/img/*"
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "fonts/AtkinsonHyperlegible-Regular.ttf",
+                "fonts/AtkinsonHyperlegible-Italic.ttf",
+                "fonts/AtkinsonHyperlegible-Bold.ttf",
+                "fonts/AtkinsonHyperlegible-BoldItalic.ttf"
+            ],
+            "matches": ["*://www.scribblehub.com/series/*"]
+        }
+    ]
 }

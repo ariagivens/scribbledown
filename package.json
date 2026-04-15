@@ -31,10 +31,11 @@
     },
     "dependencies": {
         "@nfnitloop/better-iterators": "npm:@jsr/nfnitloop__better-iterators@^2.0.0-rc4",
+        "@zip.js/zip.js": "^2.8.26",
         "cheerio": "^1.2.0",
         "file-saver": "^2.0.5",
         "handlebars": "^4.7.9",
-        "jszip": "^3.10.1",
+        "mime": "^4.1.0",
         "sanitize-filename": "^1.6.4",
         "uuid": "^13.0.0"
     }
