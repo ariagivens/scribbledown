@@ -184,7 +184,7 @@ function to_xhtml(paragraph: Paragraph): string {
         switch (paragraph.kind) {
             case "break": {
                 if ("dinkus" in paragraph) {
-                    return `<hr class="dinkus-break" /><span class="dinkus-break" aria-hidden="true">${paragraph.dinkus}</span>`;
+                    return `<span class="dinkus-break" role="separator">${paragraph.dinkus}</span>`;
                 } else {
                     return `<hr class="whitespace-break" />`;
                 }
