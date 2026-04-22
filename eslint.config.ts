@@ -31,6 +31,7 @@ export default defineConfig([
                     argsIgnorePattern: "^_",
                 },
             ],
+            "no-useless-escape": ["off"],
         },
     },
     {

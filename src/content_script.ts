@@ -7,13 +7,8 @@ import sanitize from "sanitize-filename";
 import { saveAs } from "file-saver";
 import mime from "mime/lite";
 import { cross_origin_fetch } from "./internal";
-
-function get_title(): string {
-    return (
-        document.querySelector<HTMLMetaElement>("meta[property='og:title']")
-            ?.content ?? "Untitled"
-    );
-}
+import type { Title } from "./title";
+import { get_title } from "./title";
 
 export type Author = {
     name: string;
@@ -39,6 +34,35 @@ export type Cover = {
     image: Blob;
 };
 
+function filename(title: Title, author: Author): string {
+    let filename = title.title;
+    if (title.subtitles[0]) {
+        filename += ` - ${title.subtitles[0]}`;
+    }
+    filename += ` by ${author.name}.epub`;
+    filename = sanitize(filename, {
+        replacement: (s: string) => {
+            switch (s) {
+                case "/":
+                case "\\":
+                case ":":
+                case "*":
+                case "|":
+                    return "-";
+                case "<":
+                    return "(";
+                case ">":
+                    return ")";
+                case "?":
+                case '"':
+                default:
+                    return "";
+            }
+        },
+    });
+    return filename;
+}
+
 async function get_cover(): Promise<Cover> {
     const url =
         document.querySelector<HTMLImageElement>(".fic_image img")?.src ??
@@ -63,7 +87,7 @@ async function download() {
     const cover = await get_cover();
     const uid = uuidv4();
     const epub = await create_epub(chapters, title, uid, author, cover);
-    saveAs(epub, `${sanitize(title)} - ${sanitize(author.name)}.epub`);
+    saveAs(epub, filename(title, author));
 }
 
 const read_buttons = document.querySelector(".read_buttons");

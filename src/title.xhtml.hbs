@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html>
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:epub="http://www.idpf.org/2007/ops"
+>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Titlepage</title>
+        <link rel="stylesheet" type="text/css" href="fonts.css" />
+        <link rel="stylesheet" type="text/css" href="style.css" />
+    </head>
+    <body epub:type="frontmatter">
+        <section epub:type="titlepage">
+            <hgroup epub:type="fulltitle">
+                <h1 epub:type="title">{{title.title}}</h1>
+                {{#each title.subtitles}}
+                <p role="doc-subtitle" epub:type="subtitle">{{this}}</p>
+                {{/each}}
+            </hgroup>
+            <p>{{author.name}}</p>
+        </section>
+    </body>
+</html>

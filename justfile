@@ -17,3 +17,6 @@ run:
 
 watch:
     npx rolldown -cw & just run
+
+test:
+    npx vitest

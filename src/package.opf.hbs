@@ -6,7 +6,16 @@
 >
     <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
         <dc:identifier id="uid">{{uid}}</dc:identifier>
-        <dc:title>{{title}}</dc:title>
+        <dc:title id="title">{{title.title}}</dc:title>
+        <meta property="title-type" refines="#title">main</meta>
+        {{#each title.subtitles}}
+        <dc:title id="subtitle-{{@index}}">{{this}}</dc:title>
+        <meta property="title-type" refines="#subtitle-{{@index}}">
+            subtitle
+        </meta>
+        {{/each}}
+        <dc:title id="fulltitle">{{fulltitle}}</dc:title>
+        <meta property="title-type" refines="#fulltitle">extended</meta>
         <dc:creator>{{author.name}}</dc:creator>
         <dc:language>en</dc:language>
         <meta name="cover" content="cover-image" />
