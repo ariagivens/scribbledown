@@ -39,6 +39,11 @@
             media-type="application/xhtml+xml"
             properties="calibre:title-page"
         />
+        <item
+            href="title.xhtml"
+            id="title-page"
+            media-type="application/xhtml+xml"
+        />
         {{#each chapters}}
         <item
             href="{{identifier}}.xhtml"
@@ -54,6 +59,7 @@
     </manifest>
     <spine>
         <itemref idref="cover-page" />
+        <itemref idref="title-page" />
         {{#each chapters}}
         <itemref idref="{{identifier}}" />
         {{/each}}

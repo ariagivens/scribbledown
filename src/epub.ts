@@ -6,7 +6,8 @@ import { RawTemplate as package_opf_template } from "./package.opf.hbs";
 import { RawTemplate as nav_xhtml_template } from "./nav.xhtml.hbs";
 import { RawTemplate as chapter_xhtml_template } from "./chapter.xhtml.hbs";
 import { RawTemplate as fonts_css_template } from "./fonts.css.hbs";
-import { RawTemplate as cover_html_template } from "./cover.xhtml.hbs";
+import { RawTemplate as cover_xhtml_template } from "./cover.xhtml.hbs";
+import { RawTemplate as title_xhtml_template } from "./title.xhtml.hbs";
 import ofl_txt from "./fonts/OFL.txt";
 import { RawTemplate as style_css_template } from "./style.css.hbs";
 import { Zip } from "./zip";
@@ -78,11 +79,12 @@ function add_metadata(
 function add_front_matter(
     zip: Zip,
     cover: Cover,
-    title: string,
-    _author: Author,
+    title: Title,
+    author: Author,
 ) {
     zip.add(`OEBPS/cover.${cover.extension}`, cover.image);
-    zip.add("OEBPS/cover.xhtml", cover_html_template({ cover, title }));
+    zip.add("OEBPS/cover.xhtml", cover_xhtml_template({ cover, title }));
+    zip.add("OEBPS/title.xhtml", title_xhtml_template({ author, title }));
 }
 
 function add_content(zip: Zip, chapters: Chapter[]) {
@@ -123,7 +125,7 @@ export async function create_epub(
 ): Promise<Blob> {
     const zip = new Zip("application/epub+zip");
     add_metadata(zip, chapters, title, uid, author, cover);
-    add_front_matter(zip, cover, title.title, author);
+    add_front_matter(zip, cover, title, author);
     add_content(zip, chapters);
     await add_fonts(zip);
     add_style(zip);
