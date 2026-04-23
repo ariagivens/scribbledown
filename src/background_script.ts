@@ -54,5 +54,4 @@ function handle_message(request: unknown): Promise<MessageResponse> {
     }
 }
 
-console.log("background script");
 browser.runtime.onMessage.addListener(handle_message);
