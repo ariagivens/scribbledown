@@ -44,6 +44,11 @@
             id="title-page"
             media-type="application/xhtml+xml"
         />
+        <item
+            href="copyright.xhtml"
+            id="copyright-page"
+            media-type="application/xhtml+xml"
+        />
         {{#each chapters}}
         <item
             href="{{identifier}}.xhtml"
@@ -60,6 +65,7 @@
     <spine>
         <itemref idref="cover-page" />
         <itemref idref="title-page" />
+        <itemref idref="copyright-page" />
         {{#each chapters}}
         <itemref idref="{{identifier}}" />
         {{/each}}
