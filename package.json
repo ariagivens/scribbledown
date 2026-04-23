@@ -1,5 +1,6 @@
 {
     "name": "scribbledown",
+    "repository": "github:ariagivens/scribbledown",
     "author": "Aria Givens <aria@ariagivens.com>",
     "license": "GPL-3.0-only",
     "type": "module",
