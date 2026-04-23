@@ -3,7 +3,13 @@ META-INF/
 	container.xml
 OEBPS/
 	package.opf
-	content.xhtml
-	images/
-		cover.png
-
+	nav.xhtml
+	cover.jpg
+	cover.xhtml
+	title.xhtml
+	copyright.xhtml
+	chapterXXXX.html ...
+	style.css
+	fonts.css
+	fonts/
+	    ...
