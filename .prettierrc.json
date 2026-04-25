@@ -1,6 +1,6 @@
 {
     "tabWidth": 4,
-    "xmlWhitespaceSensitivity": "ignore",
+    "xmlWhitespaceSensitivity": "preserve",
     "proseWrap": "always",
     "plugins": ["@prettier/plugin-xml"],
     "overrides": [

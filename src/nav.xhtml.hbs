@@ -6,16 +6,30 @@
 >
     <head>
         <meta charset="UTF-8" />
-        <title>{{title}}</title>
+        <title>Contents</title>
     </head>
     <body>
         <nav epub:type="toc" id="toc">
+            <h2>Contents</h2>
             <ol>
                 {{#each chapters}}
                 <li>
                     <a href="{{identifier}}.xhtml#start">{{title}}</a>
                 </li>
                 {{/each}}
+            </ol>
+        </nav>
+        <nav epub:type="landmarks">
+            <ol>
+                <li>
+                    <a epub:type="toc" href="#toc">Contents</a>
+                    <a
+                        epub:type="bodymatter"
+                        href="{{chapters.0.identifier}}.xhtml#start"
+                    >
+                        Start of Content
+                    </a>
+                </li>
             </ol>
         </nav>
     </body>
