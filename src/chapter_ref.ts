@@ -1,4 +1,5 @@
 import * as cheerio from "cheerio";
+import fetch from "./fetch";
 
 export type ChapterRef = {
     order: number;

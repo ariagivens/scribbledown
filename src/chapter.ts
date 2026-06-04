@@ -3,6 +3,7 @@ import { lazy } from "@nfnitloop/better-iterators";
 import * as cheerio from "cheerio";
 import * as domhandler from "domhandler";
 import type { Element } from "domhandler";
+import fetch from "./fetch";
 
 type RawChapter = {
     order: number;

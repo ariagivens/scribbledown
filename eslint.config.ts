@@ -1,5 +1,4 @@
 import js from "@eslint/js";
-import globals from "globals";
 import tseslint from "typescript-eslint";
 import json from "@eslint/json";
 import css from "@eslint/css";
@@ -12,7 +11,6 @@ export default defineConfig([
         files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
         plugins: { js },
         extends: ["js/recommended"],
-        languageOptions: { globals: globals.browser },
     },
     tseslint.configs.recommended,
     {
@@ -32,6 +30,7 @@ export default defineConfig([
                 },
             ],
             "no-useless-escape": ["off"],
+            "no-restricted-globals": ["error", "fetch"], // Specify window.fetch or ./fetch
         },
     },
     {

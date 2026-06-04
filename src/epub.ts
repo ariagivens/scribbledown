@@ -13,6 +13,7 @@ import ofl_txt from "./fonts/OFL.txt";
 import { RawTemplate as style_css_template } from "./style.css.hbs";
 import { Zip } from "./zip";
 import { fulltitle } from "./title";
+import fetch from "./fetch";
 
 type Font = {
     identifier: string;

@@ -1,3 +1,4 @@
+import fetch from "./fetch";
 import {
     CrossOriginFetchResponse,
     type MessageResponse,

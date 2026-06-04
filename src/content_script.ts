@@ -6,9 +6,9 @@ import { v4 as uuidv4 } from "uuid";
 import sanitize from "sanitize-filename";
 import { saveAs } from "file-saver";
 import mime from "mime/lite";
-import { cross_origin_fetch } from "./internal";
 import type { Title } from "./title";
 import { get_title } from "./title";
+import fetch from "./fetch";
 
 export type Author = {
     name: string;
@@ -68,7 +68,7 @@ async function get_cover(): Promise<Cover> {
         document.querySelector<HTMLImageElement>(".fic_image img")?.src ??
         "https://www.scribblehub.com/img/noimagefound.jpg";
     console.log(url);
-    const response = await cross_origin_fetch(url, { method: "GET" });
+    const response = await fetch(url);
     if (!response.ok) {
         throw new Error("Failed to download cover image.");
     }
