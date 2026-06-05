@@ -1,4 +1,3 @@
-import fetch from "./fetch";
 import {
     CrossOriginFetchResponse,
     type MessageResponse,
@@ -12,7 +11,13 @@ import { BlobReader, BlobWriter, TextReader, ZipWriter } from "@zip.js/zip.js";
 async function cross_origin_fetch(
     request: CrossOriginFetchRequest,
 ): Promise<CrossOriginFetchResponse> {
-    const response = await fetch(request.input, request.init);
+    let response;
+    try {
+        response = await window.fetch(request.input, request.init);
+    } catch {
+        response = new Response("Network Error", { status: 503 });
+    }
+
     const body = await response.arrayBuffer();
     const status = response.status;
     const status_text = response.statusText;
