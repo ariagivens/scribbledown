@@ -1,5 +1,4 @@
 import type { ChapterRef } from "./chapter_ref";
-import { lazy } from "@nfnitloop/better-iterators";
 import * as cheerio from "cheerio";
 import * as domhandler from "domhandler";
 import type { Element } from "domhandler";
@@ -37,44 +36,108 @@ type ThematicBreak = {
 
 type Paragraph = ParagraphSegment[] | ThematicBreak;
 
+function clamp(lower: number, value: number, upper: number): number {
+    return value < lower ? lower : value > upper ? upper : value;
+}
+
+type Progress = {
+    value: number;
+};
+
+const update_delay = 500;
+
+async function update_progress(
+    progress: Progress,
+    segments: number,
+    backoff: number,
+    download_time: number,
+    signal: AbortSignal,
+) {
+    if (segments === 0) {
+        progress.value = 1;
+        return;
+    }
+
+    let elapsed = 0;
+    let start = new PerformanceMark("update_progress_start");
+    const zone = 1 - progress.value;
+    while (elapsed < backoff + download_time) {
+        const end = new PerformanceMark("update_progress_end");
+        const duration = end.startTime - start.startTime;
+        elapsed += duration;
+
+        progress.value = clamp(
+            0,
+            progress.value +
+                (zone / segments) * (duration / (backoff + download_time)),
+            1,
+        );
+
+        await new Promise((r) => setTimeout(r, update_delay));
+        if (signal.aborted) {
+            return;
+        }
+
+        start = end;
+    }
+}
+
 async function fetch_chapter_raws(
     chapter_refs: ChapterRef[],
 ): Promise<RawChapter[]> {
-    const jitter = 500;
     const factor = 1.2;
-    let backoff = 9000;
-    return await lazy(chapter_refs)
-        .toAsync()
-        .map(async ({ title, order, link }) => {
-            console.log("Chapter " + order);
-            let response = await fetch(link, { method: "GET" });
+    let backoff = 9500;
+    const progress = { value: 0 };
+    let remaining_chapters = chapter_refs.length;
 
-            if (order !== chapter_refs.length) {
-                await new Promise((r) =>
-                    setTimeout(r, backoff + Math.random() * jitter),
-                );
-            }
+    const chapters = [];
+    for (const { title, order, link } of chapter_refs) {
+        let controller = new AbortController();
+        update_progress(
+            progress,
+            remaining_chapters - 1,
+            backoff,
+            200,
+            controller.signal,
+        );
 
-            while (!response.ok && response.status == 403) {
-                backoff *= factor;
-                console.log("retrying ... (" + backoff + ")");
-                response = await fetch(link, { method: "GET" });
-                await new Promise((r) =>
-                    setTimeout(r, backoff + Math.random() * jitter),
-                );
-            }
+        console.log("Chapter " + order);
+        let response = await fetch(link, { method: "GET" });
 
-            if (!response.ok) {
-                throw new Error("Error code: " + response.status);
-            }
+        if (order !== chapter_refs.length) {
+            await new Promise((r) => setTimeout(r, backoff));
+        }
 
-            return {
-                title,
-                order,
-                html: await response.text(),
-            };
-        })
-        .toArray();
+        while (!response.ok && response.status == 403) {
+            backoff *= factor;
+            console.log("retrying ... (" + backoff + ")");
+            controller.abort();
+            controller = new AbortController();
+            update_progress(
+                progress,
+                remaining_chapters - 1,
+                backoff,
+                200,
+                controller.signal,
+            );
+            response = await fetch(link, { method: "GET" });
+            await new Promise((r) => setTimeout(r, backoff));
+        }
+
+        if (!response.ok) {
+            throw new Error("Error code: " + response.status);
+        }
+
+        chapters.push({
+            title,
+            order,
+            html: await response.text(),
+        });
+        remaining_chapters -= 1;
+        controller.abort();
+    }
+
+    return chapters;
 }
 
 function to_segments(
