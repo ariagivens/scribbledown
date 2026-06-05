@@ -13,7 +13,6 @@ import ofl_txt from "./fonts/OFL.txt";
 import { RawTemplate as style_css_template } from "./style.css.hbs";
 import { Zip } from "./zip";
 import { fulltitle } from "./title";
-import fetch from "./fetch";
 
 type Font = {
     identifier: string;
@@ -103,7 +102,7 @@ function add_content(zip: Zip, chapters: Chapter[]) {
 async function add_fonts(zip: Zip) {
     zip.add("OEBPS/fonts.css", fonts_css_template({ fonts }));
     for (const { src } of fonts) {
-        const response = await fetch(browser.runtime.getURL(src));
+        const response = await window.fetch(browser.runtime.getURL(src));
         if (!response.ok) {
             throw new Error("Failed to load font");
         }
