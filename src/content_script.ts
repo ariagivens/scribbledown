@@ -1,5 +1,5 @@
 import { get_chapter_refs } from "./chapter_ref";
-import { get_chapters } from "./chapter";
+import { get_chapters, Progress } from "./chapter";
 import { create_epub } from "./epub";
 
 import { v4 as uuidv4 } from "uuid";
@@ -142,23 +142,45 @@ function get_copyright(author: Author): Copyright {
     return { holder, statement, url, date };
 }
 
-async function download() {
-    const chapter_refs = await get_chapter_refs();
-    const chapters = await get_chapters(chapter_refs);
-    const title = get_title();
-    const author = get_author();
-    const cover = await get_cover();
-    const uid = uuidv4();
-    const copyright = get_copyright(author);
-    const epub = await create_epub(
-        chapters,
-        title,
-        uid,
-        author,
-        cover,
-        copyright,
-    );
-    saveAs(epub, filename(title, author));
+async function download(event: PointerEvent) {
+    const button = event.currentTarget;
+    const progress = document.querySelector("#sd_progress");
+    if (
+        !(
+            button instanceof HTMLAnchorElement &&
+            progress instanceof HTMLProgressElement
+        )
+    ) {
+        return;
+    }
+    button.style.display = "none";
+    progress.style.display = "inline";
+    try {
+        const chapter_refs = await get_chapter_refs();
+        const chapters = await get_chapters(
+            chapter_refs,
+            new Progress(progress),
+        );
+        const title = get_title();
+        const author = get_author();
+        const cover = await get_cover();
+        const uid = uuidv4();
+        const copyright = get_copyright(author);
+        const epub = await create_epub(
+            chapters,
+            title,
+            uid,
+            author,
+            cover,
+            copyright,
+        );
+        saveAs(epub, filename(title, author));
+    } catch (e) {
+        console.error(e);
+    } finally {
+        button.style.display = "inline";
+        progress.style.display = "none";
+    }
 }
 
 const read_buttons = document.querySelector(".read_buttons");
@@ -171,6 +193,13 @@ if (read_buttons) {
     download_button.appendChild(span);
     download_button.onclick = download;
     read_buttons.appendChild(download_button);
+    const progress = document.createElement("progress");
+    progress.id = "sd_progress";
+    progress.style.width = `${span.offsetWidth}px`;
+    progress.style.display = "none";
+    progress.value = 0;
+    progress.max = 1;
+    read_buttons.appendChild(progress);
 }
 
 const tip_icon = document.querySelector(".tip_icon");

@@ -37,12 +37,36 @@ type ThematicBreak = {
 type Paragraph = ParagraphSegment[] | ThematicBreak;
 
 function clamp(lower: number, value: number, upper: number): number {
+    if (!(value <= 0) && !(value >= 0)) {
+        // NaN!
+        return upper;
+    }
+
     return value < lower ? lower : value > upper ? upper : value;
 }
 
-type Progress = {
-    value: number;
-};
+export class Progress {
+    #value: number = 0;
+    #element: HTMLProgressElement;
+
+    constructor(element: HTMLProgressElement) {
+        this.#element = element;
+        this.set(0);
+    }
+
+    add(amount: number) {
+        this.set(this.#value + amount);
+    }
+
+    set(amount: number) {
+        this.#value = clamp(0, amount, 1);
+        this.#element.value = this.#value;
+    }
+
+    get() {
+        return this.#value;
+    }
+}
 
 const update_delay = 500;
 
@@ -54,23 +78,20 @@ async function update_progress(
     signal: AbortSignal,
 ) {
     if (segments === 0) {
-        progress.value = 1;
+        progress.set(1);
         return;
     }
 
     let elapsed = 0;
     let start = new PerformanceMark("update_progress_start");
-    const zone = 1 - progress.value;
+    const zone = 1 - progress.get();
     while (elapsed < backoff + download_time) {
         const end = new PerformanceMark("update_progress_end");
         const duration = end.startTime - start.startTime;
         elapsed += duration;
 
-        progress.value = clamp(
-            0,
-            progress.value +
-                (zone / segments) * (duration / (backoff + download_time)),
-            1,
+        progress.add(
+            (zone / segments) * (duration / (backoff + download_time)),
         );
 
         await new Promise((r) => setTimeout(r, update_delay));
@@ -84,10 +105,10 @@ async function update_progress(
 
 async function fetch_chapter_raws(
     chapter_refs: ChapterRef[],
+    progress: Progress,
 ): Promise<RawChapter[]> {
     const factor = 1.2;
     let backoff = 9500;
-    const progress = { value: 0 };
     let remaining_chapters = chapter_refs.length;
 
     const chapters = [];
@@ -262,8 +283,9 @@ function to_xhtml(paragraph: Paragraph): string {
 
 export async function get_chapters(
     chapter_refs: ChapterRef[],
+    progress: Progress,
 ): Promise<Chapter[]> {
-    const raws = await fetch_chapter_raws(chapter_refs);
+    const raws = await fetch_chapter_raws(chapter_refs, progress);
     const chapters = raws.map(({ title, order, html }) => {
         const identifier = "chapter" + order.toString().padStart(4, "0");
         const chapter = cheerio.load(html);
